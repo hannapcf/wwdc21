@@ -17,32 +17,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Live View" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6a-7e-CMz">
-                                <rect key="frame" x="151.5" y="323" width="72" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Cover" translatesAutoresizingMaskIntoConstraints="NO" id="lF7-Hb-Qt4">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="title" translatesAutoresizingMaskIntoConstraints="NO" id="KYO-Bf-xJc">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" misplaced="YES" image="cover" translatesAutoresizingMaskIntoConstraints="NO" id="fAU-JZ-Nh6">
+                                <rect key="frame" x="4" y="48" width="366" height="571"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="qaR-nP-dw0"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="h6a-7e-CMz" firstAttribute="centerX" secondItem="Rh2-0a-zph" secondAttribute="centerX" id="DgE-dK-YaV"/>
-                            <constraint firstItem="lF7-Hb-Qt4" firstAttribute="centerX" secondItem="qaR-nP-dw0" secondAttribute="centerX" id="EIJ-tu-nNE"/>
-                            <constraint firstItem="KYO-Bf-xJc" firstAttribute="width" secondItem="Rh2-0a-zph" secondAttribute="width" id="SLB-Wv-7op"/>
-                            <constraint firstItem="lF7-Hb-Qt4" firstAttribute="width" secondItem="Rh2-0a-zph" secondAttribute="width" id="WC2-wb-GoE"/>
-                            <constraint firstItem="KYO-Bf-xJc" firstAttribute="centerY" secondItem="qaR-nP-dw0" secondAttribute="centerY" id="faS-Y7-r8N"/>
-                            <constraint firstItem="lF7-Hb-Qt4" firstAttribute="centerY" secondItem="qaR-nP-dw0" secondAttribute="centerY" id="gtq-A2-G60"/>
-                            <constraint firstItem="lF7-Hb-Qt4" firstAttribute="height" secondItem="Rh2-0a-zph" secondAttribute="height" id="nbz-9U-nSc"/>
-                            <constraint firstItem="KYO-Bf-xJc" firstAttribute="centerX" secondItem="qaR-nP-dw0" secondAttribute="centerX" id="okz-LF-saH"/>
-                            <constraint firstItem="h6a-7e-CMz" firstAttribute="centerY" secondItem="Rh2-0a-zph" secondAttribute="centerY" id="rsb-9d-7m1"/>
-                            <constraint firstItem="KYO-Bf-xJc" firstAttribute="height" secondItem="Rh2-0a-zph" secondAttribute="height" id="xZi-Bj-3Ma"/>
+                            <constraint firstItem="fAU-JZ-Nh6" firstAttribute="width" secondItem="Rh2-0a-zph" secondAttribute="width" id="5tn-GW-Lh6"/>
+                            <constraint firstItem="fAU-JZ-Nh6" firstAttribute="centerX" secondItem="qaR-nP-dw0" secondAttribute="centerX" id="JgN-6m-6Kz"/>
+                            <constraint firstItem="fAU-JZ-Nh6" firstAttribute="centerX" secondItem="qaR-nP-dw0" secondAttribute="centerX" id="XvQ-vh-nxh"/>
+                            <constraint firstItem="fAU-JZ-Nh6" firstAttribute="centerY" secondItem="qaR-nP-dw0" secondAttribute="centerY" id="v9Q-Dl-yS3"/>
+                            <constraint firstItem="fAU-JZ-Nh6" firstAttribute="height" secondItem="Rh2-0a-zph" secondAttribute="height" id="zpc-gv-tOb"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -52,8 +38,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Cover" width="512" height="768"/>
-        <image name="title" width="512" height="768"/>
+        <image name="cover" width="512" height="768"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
