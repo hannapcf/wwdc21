@@ -112,7 +112,7 @@ public class Aurora{
         
         auroraCurrentLevel += 1
         
-        let proportion = CGFloat(auroraCurrentLevel)/CGFloat(auroraMaxUpgrade)
+        let proportion = 0.3 + 0.7 * (CGFloat(auroraCurrentLevel)/CGFloat(auroraMaxUpgrade))
         
         //particle
         particleBirthRateMin = CGFloat.random(in: 1...5) * proportion

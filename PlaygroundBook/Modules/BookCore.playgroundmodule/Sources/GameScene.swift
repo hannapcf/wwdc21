@@ -22,6 +22,7 @@ public class GameScene: SKScene {
     private var nextStarMinTime: Double?
     private var currentStarIndex = 0
     private var aurora = Aurora(auroraMaxUpgrade: 1)
+    private var followingStars:Bool = false
     
     // MARK: LIFECYCLE
     // Essa parte do código é executada logo que a cena começa
@@ -33,7 +34,7 @@ public class GameScene: SKScene {
         self.addChild(background) //Adicionando background
         
         view.showsFPS = true
-        createStarPath(starCount: 4)
+        createStarPath(starCount: 10)
                 
     }
     
@@ -100,6 +101,7 @@ public class GameScene: SKScene {
         
         nextStar?.alpha = 0
         
+        
         if currentStarIndex < stars.count-1{
             currentStarIndex += 1
             nextStar = stars[currentStarIndex]
@@ -110,6 +112,7 @@ public class GameScene: SKScene {
             }
         }
         else if currentStarIndex == stars.count-1{
+            followingStars = false
             currentStarIndex += 1
             aurora.upgrade()
             for emitter in emitters{
@@ -205,9 +208,12 @@ public class GameScene: SKScene {
     func touchDown(atPoint pos : CGPoint) {
         //verificar se a pessoa tocou na primeira estrela
         aurora = Aurora(auroraMaxUpgrade: stars.count)
+
         
         if nextStar?.contains(pos) ?? false {
-            //se sim:código
+            
+            followingStars = true
+            
             //salva uma variavel o momento de agora para comparar com o toque da proxima estrela
             lastStarTap = Date().timeIntervalSince1970 //salvando no ultimo tap o momento de agora
             emitters = [] //lista vazia
@@ -225,14 +231,17 @@ public class GameScene: SKScene {
     
     func touchMoved(toPoint pos : CGPoint) {
         //verifica se a pessoa está se aproximando da próxima estrela
-        //fazer depois
-        spawnEmitter(pos: pos, aurora: aurora)
-            //se sim: colocar emittetr na posição e verfiica se chegou na próxima estrela (tempo maior do que minimo: se menor: desmonta a aurora atual)
+        if followingStars == true{
+            
+            //se sim: colocar emitter na posição e verfiica se chegou na próxima estrela (tempo maior do que minimo: se menor: desmonta a aurora atual)
+            spawnEmitter(pos: pos, aurora: aurora)
             if nextStar?.contains(pos) ?? false {
 
                 getNextStar()
 
             }
+        }
+        
 
             //se nao: verifica se a pessoa esta se afastando da próxima estrela
                 //se sim: desmonta a aurora atual
@@ -243,10 +252,13 @@ public class GameScene: SKScene {
     
     func touchUp(atPoint pos : CGPoint) {
         //verifica se a pessoa passou em todas as estrelas
+        followingStars = false
         if currentStarIndex < stars.count{
+            
             destroyAurora()
         }
         createStarPath(starCount: Int.random(in: 3...5))
+        
     }
     
     
