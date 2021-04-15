@@ -14,7 +14,7 @@ import BookCore
 
 let sceneView = SKView(frame: CGRect(x: 0, y: 0, width: 512, height: 768))
 if let scene = GameScene(fileNamed: "GameScene") {
-    scene.scaleMode = .aspectFill
+    scene.scaleMode = .aspectFit
     sceneView.presentScene(scene)
     sceneView.ignoresSiblingOrder = true
     

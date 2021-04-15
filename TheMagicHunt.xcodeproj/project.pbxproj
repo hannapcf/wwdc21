@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0339CAB126263C3400D8BD1B /* Aurora.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339CAB026263C3400D8BD1B /* Aurora.swift */; };
+		039F243D26287E3600D54BA7 /* Cutscene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039F243C26287E3600D54BA7 /* Cutscene.swift */; };
 		03D913C9261E6C3B0007DF00 /* Aurora.sks in Resources */ = {isa = PBXBuildFile; fileRef = 03D913C8261E6C3B0007DF00 /* Aurora.sks */; };
 		447A265B2600305100C533BC /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 447A265A2600305100C533BC /* GameScene.sks */; };
 		447A2678260036B500C533BC /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447A2677260036B500C533BC /* GameScene.swift */; };
@@ -120,6 +121,7 @@
 
 /* Begin PBXFileReference section */
 		0339CAB026263C3400D8BD1B /* Aurora.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aurora.swift; sourceTree = "<group>"; };
+		039F243C26287E3600D54BA7 /* Cutscene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cutscene.swift; sourceTree = "<group>"; };
 		03D913C8261E6C3B0007DF00 /* Aurora.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Aurora.sks; sourceTree = "<group>"; };
 		447A265A2600305100C533BC /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		447A2677260036B500C533BC /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				5E3196F22061DEA40077BBD7 /* LiveViewSupport.swift */,
 				447A2677260036B500C533BC /* GameScene.swift */,
 				0339CAB026263C3400D8BD1B /* Aurora.swift */,
+				039F243C26287E3600D54BA7 /* Cutscene.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -555,6 +558,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				447A2678260036B500C533BC /* GameScene.swift in Sources */,
+				039F243D26287E3600D54BA7 /* Cutscene.swift in Sources */,
 				0339CAB126263C3400D8BD1B /* Aurora.swift in Sources */,
 				5E3196F32061DEA40077BBD7 /* LiveViewSupport.swift in Sources */,
 				5EF2F9AE2054BBF300191409 /* LiveViewController.swift in Sources */,

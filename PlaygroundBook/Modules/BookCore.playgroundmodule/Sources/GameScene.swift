@@ -11,6 +11,7 @@ import AVFoundation
 
 public class GameScene: SKScene {
     
+    // MARK: PROPERTIES
     private var label:SKLabelNode!
     private var emitterNode = SKNode() //Criando um nó
     private let background = SKSpriteNode(imageNamed: "background") //Criando background
@@ -20,8 +21,9 @@ public class GameScene: SKScene {
     private var lastStarTap: Double?
     private var nextStarMinTime: Double?
     private var currentStarIndex = 0
-    private var aurora = Aurora()
+    private var aurora = Aurora(auroraMaxUpgrade: 1)
     
+    // MARK: LIFECYCLE
     // Essa parte do código é executada logo que a cena começa
     public override func didMove(to view: SKView) {
         
@@ -30,13 +32,15 @@ public class GameScene: SKScene {
         background.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         self.addChild(background) //Adicionando background
         
-        
         view.showsFPS = true
         createStarPath(starCount: 4)
                 
-        
     }
     
+    // MARK: METHODS
+    
+    //CRIA,ATUALIZA, ETC
+    //ESTRELAS, ETC
     //update emitter
     func updateEmitter(emitter:SKEmitterNode , aurora:Aurora){
         
@@ -90,59 +94,31 @@ public class GameScene: SKScene {
         return emitter
     }
     
-    //create aurora node
-//    func createAuroraNode()->SKEmitterNode{
-//        let emitter = createEmitter()
-//        //aplicar ações
-//        return emitter
-//    }
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-        //verificar se a pessoa tocou na primeira estrela
-        if nextStar?.contains(pos) ?? false {
-            //se sim:código
-            aurora = Aurora()
-            //salva uma variavel o momento de agora para comparar com o toque da proxima estrela
-            lastStarTap = Date().timeIntervalSince1970 //salvando no ultimo tap o momento de agora
-            emitters = [] //lista vazia
-            spawnEmiter(pos: pos, aurora: aurora)
-            nextStar?.alpha = 0
+    fileprivate func getNextStar() {
+        //salva uma variavel o momento de agora para comparar com o toque da proxima estrela
+        lastStarTap = Date().timeIntervalSince1970 //salvando no ultimo tap o momento de agora
+        
+        nextStar?.alpha = 0
+        
+        if currentStarIndex < stars.count-1{
             currentStarIndex += 1
             nextStar = stars[currentStarIndex]
             nextStar?.alpha = 1
-            
-        }
-
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        //verifica se a pessoa está se aproximando da próxima estrela
-        //fazer depois
-        spawnEmiter(pos: pos, aurora: aurora)
-            //se sim: colocar emittetr na posição e verfiica se chegou na próxima estrela (tempo maior do que minimo: se menor: desmonta a aurora atual)
-            if nextStar?.contains(pos) ?? false {
-
-                //salva uma variavel o momento de agora para comparar com o toque da proxima estrela
-                lastStarTap = Date().timeIntervalSince1970 //salvando no ultimo tap o momento de agora
-
-                nextStar?.alpha = 0
-                if currentStarIndex < stars.count-1{
-                    currentStarIndex += 1
-                    nextStar = stars[currentStarIndex]
-                    nextStar?.alpha = 1
-                }
-                else{
-                    //verifica se a pessoa passou em todas as estrelas
-                        //se sim: prepara a remoção das particulas e faz coisas bonitas
-                }
-
+            aurora.upgrade()
+            for emitter in emitters{
+                updateEmitter(emitter: emitter, aurora: aurora)
             }
-
-            //se nao: verifica se a pessoa esta se afastando da próxima estrela
-                //se sim: desmonta a aurora atual
-
-        
+        }
+        else if currentStarIndex == stars.count-1{
+            currentStarIndex += 1
+            aurora.upgrade()
+            for emitter in emitters{
+                updateEmitter(emitter: emitter, aurora: aurora)
+            }
+            destroyAurora()
+            //verifica se a pessoa passou em todas as estrelas
+            //se sim: prepara a remoção das particulas e faz coisas bonitas
+        }
     }
     
     fileprivate func destroyAurora() {
@@ -156,36 +132,33 @@ public class GameScene: SKScene {
         stars = []
         nextStar = nil
         lastStarTap = nil
-        createStarPath(starCount: Int.random(in: 3...5))
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        //verifica se a pessoa passou em todas as estrelas
-        if currentStarIndex < stars.count{
-            destroyAurora()
-        }
-
+        
     }
     
     //Remove Particles
     func removeEmitter(_ emitter: SKNode){
         let fadeOutAction = SKAction.fadeOut(withDuration: 5)
-
-        emitter.run(fadeOutAction) {
+        let wait = SKAction.wait(forDuration: 2)
+        emitter.run(.sequence([wait, fadeOutAction])){
             emitter.removeFromParent()
         }
     }
     
+    
     //Spawna particles
-    func spawnEmiter(pos: CGPoint, aurora:Aurora){
+    func spawnEmitter(pos: CGPoint, aurora:Aurora){
         // Verificar a distancia do ultimo toque
         //Detectar que a pessoa clicou
         let emitter = createEmitter(aurora:aurora)
         emitter.position = pos
         emitter.zPosition = 10
         addChild(emitter)
-        
-
+        let moveUp = SKAction.moveTo(y: pos.y+CGFloat.random(in: 2...5), duration: 1.7)
+        moveUp.timingMode = .easeInEaseOut
+        let moveDown = SKAction.moveTo(y: pos.y+CGFloat.random(in: (-5)...(-2)), duration: 1.7)
+        moveDown.timingMode = .easeInEaseOut
+        let sequence = SKAction.sequence([moveUp,moveDown])
+        emitter.run(.repeatForever(sequence))
         
         //Criar lista vazia temporária de toques
         emitters.append(emitter) //criando nova lista só com emitter
@@ -198,6 +171,7 @@ public class GameScene: SKScene {
         
         //criar lista de posições aleatórias para ser o caminho de estrelas
         var randomPositions: [CGPoint] = []
+        
         for _ in 0..<starCount {
             let randomPosition = CGPoint(x: CGFloat.random(in: -150...150), y: CGFloat.random(in: -150...150))
             randomPositions.append(randomPosition)
@@ -227,6 +201,55 @@ public class GameScene: SKScene {
     }
     
     
+    // MARK: TOUCHES
+    func touchDown(atPoint pos : CGPoint) {
+        //verificar se a pessoa tocou na primeira estrela
+        aurora = Aurora(auroraMaxUpgrade: stars.count)
+        
+        if nextStar?.contains(pos) ?? false {
+            //se sim:código
+            //salva uma variavel o momento de agora para comparar com o toque da proxima estrela
+            lastStarTap = Date().timeIntervalSince1970 //salvando no ultimo tap o momento de agora
+            emitters = [] //lista vazia
+            spawnEmitter(pos: pos, aurora: aurora)
+            nextStar?.alpha = 0
+            currentStarIndex += 1
+            nextStar = stars[currentStarIndex]
+            nextStar?.alpha = 1
+            
+        }
+
+    }
+    
+
+    
+    func touchMoved(toPoint pos : CGPoint) {
+        //verifica se a pessoa está se aproximando da próxima estrela
+        //fazer depois
+        spawnEmitter(pos: pos, aurora: aurora)
+            //se sim: colocar emittetr na posição e verfiica se chegou na próxima estrela (tempo maior do que minimo: se menor: desmonta a aurora atual)
+            if nextStar?.contains(pos) ?? false {
+
+                getNextStar()
+
+            }
+
+            //se nao: verifica se a pessoa esta se afastando da próxima estrela
+                //se sim: desmonta a aurora atual
+
+    }
+    
+    
+    
+    func touchUp(atPoint pos : CGPoint) {
+        //verifica se a pessoa passou em todas as estrelas
+        if currentStarIndex < stars.count{
+            destroyAurora()
+        }
+        createStarPath(starCount: Int.random(in: 3...5))
+    }
+    
+    
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
@@ -246,20 +269,18 @@ public class GameScene: SKScene {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
-    
     public override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
     }
     
-    
 }
 
 
 
-func loadParticle(named: String) -> SKEmitterNode? {
-    guard let path = Bundle.main.path(forResource: named, ofType: "sks") else { return nil }
-    
-    return NSKeyedUnarchiver.unarchiveObject(withFile: path) as? SKEmitterNode
-}
+//func loadParticle(named: String) -> SKEmitterNode? {
+//    guard let path = Bundle.main.path(forResource: named, ofType: "sks") else { return nil }
+//
+//    return NSKeyedUnarchiver.unarchiveObject(withFile: path) as? SKEmitterNode
+//}
 
 
