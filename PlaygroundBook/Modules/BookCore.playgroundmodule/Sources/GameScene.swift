@@ -12,9 +12,16 @@ import AVFoundation
 public class GameScene: SKScene {
     
     // MARK: PROPERTIES
+    let voiceSound = SKAction.playSoundFileNamed("theMagicHunt", waitForCompletion: false)
     private var label:SKLabelNode!
     private var emitterNode = SKNode() //Criando um nó
     private let background = SKSpriteNode(imageNamed: "background") //Criando background
+    private let background1 = SKSpriteNode(imageNamed: "background1")
+    private let background2 = SKSpriteNode(imageNamed: "background2")
+    private let background3 = SKSpriteNode(imageNamed: "background3")
+    private let background4 = SKSpriteNode(imageNamed: "background4")
+    private let background5 = SKSpriteNode(imageNamed: "background5")
+    private let background6 = SKSpriteNode(imageNamed: "background6")
     private var emitters =  [SKEmitterNode]()
     private var nextStar: SKSpriteNode?
     private var stars = [SKSpriteNode]()
@@ -23,19 +30,44 @@ public class GameScene: SKScene {
     private var currentStarIndex = 0
     private var aurora = Aurora(auroraMaxUpgrade: 1)
     private var followingStars:Bool = false
+    var music: AVAudioPlayer!
     
     // MARK: LIFECYCLE
     // Essa parte do código é executada logo que a cena começa
     public override func didMove(to view: SKView) {
         
+        //playMusic()
+        //run(voiceSound)
+        
         //Adicionando background
         background.zPosition = 0
         background.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        self.addChild(background) //Adicionando background
+        self.addChild(background)
+        background1.zPosition = 10
+        background1.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        self.addChild(background1)
+        background2.zPosition = 15
+        background2.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        self.addChild(background2)
+        background3.zPosition = 60
+        background3.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        self.addChild(background3)
+        background6.zPosition = 65
+        background6.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        self.addChild(background6)
+        background4.zPosition = 70
+        background4.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        self.addChild(background4)
+        background5.zPosition = 80
+        background5.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        self.addChild(background5)
+
         
         view.showsFPS = true
-        createStarPath(starCount: 10)
-                
+        createStarPath(starCount: 7)
+        
+
+        
     }
     
     // MARK: METHODS
@@ -107,26 +139,38 @@ public class GameScene: SKScene {
             nextStar = stars[currentStarIndex]
             nextStar?.alpha = 1
             aurora.upgrade()
-            for emitter in emitters{
-                updateEmitter(emitter: emitter, aurora: aurora)
-            }
+            // MARK: CHANGE COLORS HERE
+//            for emitter in emitters{
+//                updateEmitter(emitter: emitter, aurora: aurora)
+//            }
         }
         else if currentStarIndex == stars.count-1{
             followingStars = false
             currentStarIndex += 1
             aurora.upgrade()
-            for emitter in emitters{
-                updateEmitter(emitter: emitter, aurora: aurora)
-            }
-            destroyAurora()
-            //verifica se a pessoa passou em todas as estrelas
-            //se sim: prepara a remoção das particulas e faz coisas bonitas
+            // MARK: CHANGE COLORS HERE
+//            for emitter in emitters{
+//                updateEmitter(emitter: emitter, aurora: aurora)
+//            }
+            destroyAurora(time: 4, progressive: true)
+            
         }
     }
     
-    fileprivate func destroyAurora() {
-        for emitter in emitters{
-            removeEmitter(emitter)
+
+    fileprivate func destroyAurora(time: TimeInterval, progressive: Bool) {
+        let timeMax = time
+        let timeMin = time/2
+        
+        for (index, emitter) in emitters.enumerated(){
+            if progressive == false{
+                removeEmitter(emitter, time: time)
+            }
+            else{
+                let EmitterTime = timeMin + (timeMax - timeMin) * (Double(index)/Double(emitters.count))
+                removeEmitter(emitter, time: EmitterTime)
+            }
+            
         }
         for star in stars{
             star.removeFromParent()
@@ -139,9 +183,10 @@ public class GameScene: SKScene {
     }
     
     //Remove Particles
-    func removeEmitter(_ emitter: SKNode){
-        let fadeOutAction = SKAction.fadeOut(withDuration: 5)
-        let wait = SKAction.wait(forDuration: 2)
+    func removeEmitter(_ emitter: SKNode, time: TimeInterval){
+        let fadeOutAction = SKAction.fadeOut(withDuration: time)
+        let wait = SKAction.wait(forDuration: 1)
+        
         emitter.run(.sequence([wait, fadeOutAction])){
             emitter.removeFromParent()
         }
@@ -154,7 +199,7 @@ public class GameScene: SKScene {
         //Detectar que a pessoa clicou
         let emitter = createEmitter(aurora:aurora)
         emitter.position = pos
-        emitter.zPosition = 10
+        emitter.zPosition = 20
         addChild(emitter)
         let moveUp = SKAction.moveTo(y: pos.y+CGFloat.random(in: 2...5), duration: 1.7)
         moveUp.timingMode = .easeInEaseOut
@@ -176,7 +221,7 @@ public class GameScene: SKScene {
         var randomPositions: [CGPoint] = []
         
         for _ in 0..<starCount {
-            let randomPosition = CGPoint(x: CGFloat.random(in: -150...150), y: CGFloat.random(in: -150...150))
+            let randomPosition = CGPoint(x: CGFloat.random(in: -150...150), y: CGFloat.random(in: -200...200))
             randomPositions.append(randomPosition)
         }
         
@@ -203,6 +248,16 @@ public class GameScene: SKScene {
         
     }
     
+    // MARK: MUSIC
+ 
+//    func playMusic() {
+//        let url: URL = Bundle.main.url(forResource: "theMagicHunt", withExtension: "mp3")!
+//        music = try! AVAudioPlayer(contentsOf: url, fileTypeHint: nil)
+//        music.numberOfLoops = -1
+//        music.prepareToPlay()
+//        music.volume = 0.3
+//        music.play()
+//    }
     
     // MARK: TOUCHES
     func touchDown(atPoint pos : CGPoint) {
@@ -255,11 +310,12 @@ public class GameScene: SKScene {
         followingStars = false
         if currentStarIndex < stars.count{
             
-            destroyAurora()
+            destroyAurora(time: 1, progressive: false)
         }
-        createStarPath(starCount: Int.random(in: 3...5))
+        createStarPath(starCount: Int.random(in: 5...9))
         
     }
+    
     
     
     
