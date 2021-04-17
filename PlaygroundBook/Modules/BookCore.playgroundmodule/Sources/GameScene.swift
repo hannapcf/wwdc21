@@ -12,6 +12,10 @@ import AVFoundation
 public class GameScene: SKScene {
     
     // MARK: PROPERTIES
+    public var starpath: Answer = .yes
+    public var myEvolution: Answer = .yes
+    public var myChanges: Answer = .yes
+    
     let voiceSound = SKAction.playSoundFileNamed("theMagicHunt", waitForCompletion: false)
     private var label:SKLabelNode!
     private var emitterNode = SKNode() //Criando um nó
@@ -37,7 +41,7 @@ public class GameScene: SKScene {
     public override func didMove(to view: SKView) {
         
         
-        //run(voiceSound)
+        run(voiceSound)
         
         //Adicionando background
         background.zPosition = 0
@@ -64,10 +68,17 @@ public class GameScene: SKScene {
 
         
         view.showsFPS = true
-        createStarPath(starCount: 7)
+        
         
 
         
+    }
+    
+    
+    func startGame(){
+        if starpath == .yes{
+            createStarPath(starCount: 7)
+        }
     }
     
     // MARK: METHODS
@@ -140,18 +151,18 @@ public class GameScene: SKScene {
             nextStar?.alpha = 1
             aurora.upgrade()
             // MARK: CHANGE COLORS HERE
-//            for emitter in emitters{
-//                updateEmitter(emitter: emitter, aurora: aurora)
-//            }
+            for emitter in emitters{
+                updateEmitter(emitter: emitter, aurora: aurora)
+            }
         }
         else if currentStarIndex == stars.count-1{
             followingStars = false
             currentStarIndex += 1
             aurora.upgrade()
             // MARK: CHANGE COLORS HERE
-//            for emitter in emitters{
-//                updateEmitter(emitter: emitter, aurora: aurora)
-//            }
+            for emitter in emitters{
+                updateEmitter(emitter: emitter, aurora: aurora)
+            }
             destroyAurora(time: 6, progressive: true)
             
         }
@@ -342,13 +353,4 @@ public class GameScene: SKScene {
     }
     
 }
-
-
-
-//func loadParticle(named: String) -> SKEmitterNode? {
-//    guard let path = Bundle.main.path(forResource: named, ofType: "sks") else { return nil }
-//
-//    return NSKeyedUnarchiver.unarchiveObject(withFile: path) as? SKEmitterNode
-//}
-
 

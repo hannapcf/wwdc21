@@ -98,7 +98,7 @@ public class Cutscene: SKScene{
             changePoem()
         }
         
-        PlaygroundPage.current.navigateTo(page: .next)
+        //PlaygroundPage.current.navigateTo(page: .next)
 
     }
 
