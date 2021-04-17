@@ -10,6 +10,7 @@
 		0339CAB126263C3400D8BD1B /* Aurora.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0339CAB026263C3400D8BD1B /* Aurora.swift */; };
 		039F243D26287E3600D54BA7 /* Cutscene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039F243C26287E3600D54BA7 /* Cutscene.swift */; };
 		039F244226291AC700D54BA7 /* theMagicHunt.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 039F244126291AC700D54BA7 /* theMagicHunt.mp3 */; };
+		03A29966262A747F000D6750 /* miniCover.png in Resources */ = {isa = PBXBuildFile; fileRef = 03A29965262A747F000D6750 /* miniCover.png */; };
 		03D913C9261E6C3B0007DF00 /* Aurora.sks in Resources */ = {isa = PBXBuildFile; fileRef = 03D913C8261E6C3B0007DF00 /* Aurora.sks */; };
 		447A265B2600305100C533BC /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 447A265A2600305100C533BC /* GameScene.sks */; };
 		447A2678260036B500C533BC /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447A2677260036B500C533BC /* GameScene.swift */; };
@@ -124,10 +125,11 @@
 		0339CAB026263C3400D8BD1B /* Aurora.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aurora.swift; sourceTree = "<group>"; };
 		039F243C26287E3600D54BA7 /* Cutscene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cutscene.swift; sourceTree = "<group>"; };
 		039F244126291AC700D54BA7 /* theMagicHunt.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = theMagicHunt.mp3; sourceTree = "<group>"; };
+		03A29965262A747F000D6750 /* miniCover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = miniCover.png; sourceTree = "<group>"; };
 		03D913C8261E6C3B0007DF00 /* Aurora.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Aurora.sks; sourceTree = "<group>"; };
 		447A265A2600305100C533BC /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		447A2677260036B500C533BC /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
-		5E086DC02051C5A7004D8D25 /* MeuPlaygroundLegal.playgroundbook */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeuPlaygroundLegal.playgroundbook; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E086DC02051C5A7004D8D25 /* TheMagicHunt.playgroundbook */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheMagicHunt.playgroundbook; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E086DC72051DD03004D8D25 /* BookOverridingBuildSettings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BookOverridingBuildSettings.xcconfig; sourceTree = "<group>"; };
 		5E086DCD2051DDB8004D8D25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LiveView.storyboard; sourceTree = "<group>"; };
 		5E086DCF2051DF0F004D8D25 /* Manifest.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Manifest.plist; sourceTree = "<group>"; };
@@ -184,7 +186,7 @@
 		5E086DA4204F706E004D8D25 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5E086DC02051C5A7004D8D25 /* MeuPlaygroundLegal.playgroundbook */,
+				5E086DC02051C5A7004D8D25 /* TheMagicHunt.playgroundbook */,
 				5EF2F9AB2054BBF300191409 /* libBookCore.a */,
 				5E6F7E612368FB6A008CC191 /* libBookAPI.a */,
 				5EA2E3BD2056F35A00416A35 /* LiveViewTestApp.app */,
@@ -338,6 +340,7 @@
 		5EF2F9792054B64800191409 /* PrivateResources */ = {
 			isa = PBXGroup;
 			children = (
+				03A29965262A747F000D6750 /* miniCover.png */,
 				039F244126291AC700D54BA7 /* theMagicHunt.mp3 */,
 				03D913C8261E6C3B0007DF00 /* Aurora.sks */,
 				5EF2F97E2054B6E400191409 /* ManifestPlist.strings */,
@@ -376,7 +379,7 @@
 			);
 			name = PlaygroundBook;
 			productName = PlaygroundBook;
-			productReference = 5E086DC02051C5A7004D8D25 /* MeuPlaygroundLegal.playgroundbook */;
+			productReference = 5E086DC02051C5A7004D8D25 /* TheMagicHunt.playgroundbook */;
 			productType = "com.apple.product-type.bundle";
 		};
 		5E6F7E602368FB6A008CC191 /* BookAPI */ = {
@@ -486,6 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03D913C9261E6C3B0007DF00 /* Aurora.sks in Resources */,
+				03A29966262A747F000D6750 /* miniCover.png in Resources */,
 				039F244226291AC700D54BA7 /* theMagicHunt.mp3 in Resources */,
 				447A265B2600305100C533BC /* GameScene.sks in Resources */,
 				5EF2F97C2054B6E400191409 /* ManifestPlist.strings in Resources */,

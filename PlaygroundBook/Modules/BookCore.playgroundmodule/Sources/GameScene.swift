@@ -36,7 +36,7 @@ public class GameScene: SKScene {
     // Essa parte do código é executada logo que a cena começa
     public override func didMove(to view: SKView) {
         
-        //playMusic()
+        
         //run(voiceSound)
         
         //Adicionando background
@@ -152,7 +152,7 @@ public class GameScene: SKScene {
 //            for emitter in emitters{
 //                updateEmitter(emitter: emitter, aurora: aurora)
 //            }
-            destroyAurora(time: 4, progressive: true)
+            destroyAurora(time: 6, progressive: true)
             
         }
     }

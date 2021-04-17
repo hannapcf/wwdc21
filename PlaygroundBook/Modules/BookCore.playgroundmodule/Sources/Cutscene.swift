@@ -7,7 +7,7 @@
 
 import Foundation
 import SpriteKit
-
+import PlaygroundSupport
 
 public class Cutscene: SKScene{
     
@@ -98,7 +98,7 @@ public class Cutscene: SKScene{
             changePoem()
         }
         
-        
+        PlaygroundPage.current.navigateTo(page: .next)
 
     }
 
