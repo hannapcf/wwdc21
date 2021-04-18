@@ -21,18 +21,13 @@ public class GameScene: SKScene {
     private var emitterNode = SKNode() //Criando um nó
     private let background = SKSpriteNode(imageNamed: "background") //Criando background
     private let background1 = SKSpriteNode(imageNamed: "background1")
-    private let background2 = SKSpriteNode(imageNamed: "background2")
-    private let background3 = SKSpriteNode(imageNamed: "background3")
-    private let background4 = SKSpriteNode(imageNamed: "background4")
-    private let background5 = SKSpriteNode(imageNamed: "background5")
-    private let background6 = SKSpriteNode(imageNamed: "background6")
     private var emitters =  [SKEmitterNode]()
     private var nextStar: SKSpriteNode?
     private var stars = [SKSpriteNode]()
     private var lastStarTap: Double?
     private var nextStarMinTime: Double?
     private var currentStarIndex = 0
-    private var aurora = Aurora(auroraMaxUpgrade: 1)
+    private var aurora = Aurora(randomHues: false, auroraMaxUpgrade: 1)
     private var followingStars:Bool = false
     var music: AVAudioPlayer!
     
@@ -47,24 +42,10 @@ public class GameScene: SKScene {
         background.zPosition = 0
         background.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         self.addChild(background)
-        background1.zPosition = 10
+        background1.zPosition = 80
         background1.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         self.addChild(background1)
-        background2.zPosition = 15
-        background2.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        self.addChild(background2)
-        background3.zPosition = 60
-        background3.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        self.addChild(background3)
-        background6.zPosition = 65
-        background6.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        self.addChild(background6)
-        background4.zPosition = 70
-        background4.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        self.addChild(background4)
-        background5.zPosition = 80
-        background5.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        self.addChild(background5)
+
 
         
         view.showsFPS = true
@@ -75,9 +56,13 @@ public class GameScene: SKScene {
     }
     
     
-    func startGame(){
+    public func startGame(){
+        
         if starpath == .yes{
             createStarPath(starCount: 7)
+        }
+        else{
+            createStarPath(starCount: 1)
         }
     }
     
@@ -139,6 +124,8 @@ public class GameScene: SKScene {
     }
     
     fileprivate func getNextStar() {
+        
+
         //salva uma variavel o momento de agora para comparar com o toque da proxima estrela
         lastStarTap = Date().timeIntervalSince1970 //salvando no ultimo tap o momento de agora
         
@@ -151,24 +138,30 @@ public class GameScene: SKScene {
             nextStar?.alpha = 1
             aurora.upgrade()
             // MARK: CHANGE COLORS HERE
-            for emitter in emitters{
-                updateEmitter(emitter: emitter, aurora: aurora)
+            if myChanges == .yes{
+                for emitter in emitters{
+                    updateEmitter(emitter: emitter, aurora: aurora)
+                }
             }
+
         }
         else if currentStarIndex == stars.count-1{
             followingStars = false
             currentStarIndex += 1
             aurora.upgrade()
             // MARK: CHANGE COLORS HERE
-            for emitter in emitters{
-                updateEmitter(emitter: emitter, aurora: aurora)
+            if myChanges == .yes{
+                for emitter in emitters{
+                    updateEmitter(emitter: emitter, aurora: aurora)
+                }
             }
             destroyAurora(time: 6, progressive: true)
             
         }
     }
     
-
+    
+    
     fileprivate func destroyAurora(time: TimeInterval, progressive: Bool) {
         let timeMax = time
         let timeMin = time/2
@@ -183,13 +176,17 @@ public class GameScene: SKScene {
             }
             
         }
-        for star in stars{
-            star.removeFromParent()
+        if starpath == .yes{
+            for star in stars{
+                star.removeFromParent()
+            }
+            stars = []
+            nextStar = nil
+            lastStarTap = nil
         }
+
         emitters = []
-        stars = []
-        nextStar = nil
-        lastStarTap = nil
+
         
     }
     
@@ -259,25 +256,23 @@ public class GameScene: SKScene {
         
     }
     
-    // MARK: MUSIC
- 
-//    func playMusic() {
-//        let url: URL = Bundle.main.url(forResource: "theMagicHunt", withExtension: "mp3")!
-//        music = try! AVAudioPlayer(contentsOf: url, fileTypeHint: nil)
-//        music.numberOfLoops = -1
-//        music.prepareToPlay()
-//        music.volume = 0.3
-//        music.play()
-//    }
     
     // MARK: TOUCHES
     func touchDown(atPoint pos : CGPoint) {
         //verificar se a pessoa tocou na primeira estrela
-        aurora = Aurora(auroraMaxUpgrade: stars.count)
-
+        if myEvolution == .yes{
+            aurora = Aurora(randomHues: true, auroraMaxUpgrade: stars.count)
+        }
+        else{
+            aurora = Aurora(randomHues: false, auroraMaxUpgrade: stars.count)
+        }
         
-        if nextStar?.contains(pos) ?? false {
-            
+        if starpath == .no {
+            emitters = [] //lista vazia
+            spawnEmitter(pos: pos, aurora: aurora)
+        }
+        else if starpath == .yes && nextStar?.contains(pos) ?? false  {
+
             followingStars = true
             
             //salva uma variavel o momento de agora para comparar com o toque da proxima estrela
@@ -288,7 +283,6 @@ public class GameScene: SKScene {
             currentStarIndex += 1
             nextStar = stars[currentStarIndex]
             nextStar?.alpha = 1
-            
         }
 
     }
@@ -297,33 +291,41 @@ public class GameScene: SKScene {
     
     func touchMoved(toPoint pos : CGPoint) {
         //verifica se a pessoa está se aproximando da próxima estrela
-        if followingStars == true{
+        if starpath == .no{
+            spawnEmitter(pos: pos, aurora: aurora)
             
+        }
+        
+        else if followingStars == true && starpath == .yes{
+            
+    
             //se sim: colocar emitter na posição e verfiica se chegou na próxima estrela (tempo maior do que minimo: se menor: desmonta a aurora atual)
             spawnEmitter(pos: pos, aurora: aurora)
             if nextStar?.contains(pos) ?? false {
 
                 getNextStar()
-
             }
         }
-        
-
-            //se nao: verifica se a pessoa esta se afastando da próxima estrela
-                //se sim: desmonta a aurora atual
 
     }
     
     
     
     func touchUp(atPoint pos : CGPoint) {
-        //verifica se a pessoa passou em todas as estrelas
-        followingStars = false
-        if currentStarIndex < stars.count{
-            
-            destroyAurora(time: 1, progressive: false)
+        if starpath == .no{
+            destroyAurora(time: 6, progressive: true)
         }
-        createStarPath(starCount: Int.random(in: 5...9))
+        else{
+            
+            //verifica se a pessoa passou em todas as estrelas
+            followingStars = false
+            if currentStarIndex < stars.count{
+                
+                destroyAurora(time: 1, progressive: false)
+            }
+            createStarPath(starCount: Int.random(in: 5...9))
+        }
+
         
     }
     

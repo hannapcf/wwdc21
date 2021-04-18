@@ -59,12 +59,17 @@ public class Aurora{
     //color sequence
     var particleColorSequence: SKKeyframeSequence = SKKeyframeSequence()
     
-    // MARK: CHANGE COLOR HERE
+    
     let originalColorsHues: [CGFloat]
     
-    public init(auroraMaxUpgrade: Int) {
-        
+    let randomHues: Bool
+    
+    public init(randomHues: Bool, auroraMaxUpgrade: Int) {
+       
+        self.randomHues = randomHues
         self.auroraMaxUpgrade = auroraMaxUpgrade
+        
+        
         
         //particles
         particleTexture = SKTexture(imageNamed: "meuspark")
@@ -113,6 +118,11 @@ public class Aurora{
     //upgrade aurora
     func upgrade(){
         
+        if auroraCurrentLevel >= auroraMaxUpgrade{
+            return
+        }
+        
+        
         auroraCurrentLevel += 1
         
         let proportion = 0.3 + 0.6 * (CGFloat(auroraCurrentLevel)/CGFloat(auroraMaxUpgrade))
@@ -134,29 +144,29 @@ public class Aurora{
         particleScaleSequence.addKeyframeValue(0.05, time: 1)
         particleScaleSequence.addKeyframeValue(0.04, time: 2)
         
-//        //color sequence
-//        particleColorSequence = SKKeyframeSequence()
-//
-//        particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 20/100 * proportion, brightness: 100/100, alpha: 0.3), time: 0.2)
-//
-//        particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 80/100 * proportion, brightness: 100/100, alpha: 0.5), time: CGFloat.random(in: 0.5...1))
-//
-//        particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 100/100 * proportion, brightness: 100/100, alpha: 0.04), time: CGFloat.random(in: 1...2))
-//
-//        particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 70/100 * proportion, brightness: 100/100, alpha: 0.15), time: CGFloat.random(in: 2...4))
-        
-        // MARK: CHANGE COLOR HERE
-
-        //color sequence
         particleColorSequence = SKKeyframeSequence()
+        
+        //color sequence
+        if randomHues{
+            particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 20/100 * proportion, brightness: 100/100, alpha: 0.3), time: 0.2)
 
-        particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[0], saturation: 20/100 * proportion, brightness: 100/100, alpha: 0.3), time: 0)
+            particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 80/100 * proportion, brightness: 100/100, alpha: 0.5), time: CGFloat.random(in: 0.5...1))
 
-        particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[1], saturation: 80/100 * proportion, brightness: 100/100, alpha: 0.5), time: CGFloat.random(in: 0.5...1))
+            particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 100/100 * proportion, brightness: 100/100, alpha: 0.04), time: CGFloat.random(in: 1...2))
 
-        particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[2], saturation: 100/100 * proportion, brightness: 100/100, alpha: 0.04), time: CGFloat.random(in: 1...2.5))
+            particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 70/100 * proportion, brightness: 100/100, alpha: 0.15), time: CGFloat.random(in: 2...4))
+        }
+        else{
+            particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[0], saturation: 20/100 * proportion, brightness: 100/100, alpha: 0.3), time: 0)
 
-        particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[3], saturation: 70/100 * proportion, brightness: 100/100, alpha: 0.15), time: CGFloat.random(in: 2.5...4))
+            particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[1], saturation: 80/100 * proportion, brightness: 100/100, alpha: 0.5), time: CGFloat.random(in: 0.5...1))
+
+            particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[2], saturation: 100/100 * proportion, brightness: 100/100, alpha: 0.04), time: CGFloat.random(in: 1...2.5))
+
+            particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[3], saturation: 70/100 * proportion, brightness: 100/100, alpha: 0.15), time: CGFloat.random(in: 2.5...4))
+        }
+        
+
         
     }
     
