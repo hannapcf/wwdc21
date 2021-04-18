@@ -12,6 +12,7 @@ import AVFoundation
 public class GameScene: SKScene {
     
     // MARK: PROPERTIES
+    
     public var starpath: Answer = .yes
     public var myEvolution: Answer = .yes
     public var myChanges: Answer = .yes
@@ -35,7 +36,6 @@ public class GameScene: SKScene {
     // Essa parte do código é executada logo que a cena começa
     public override func didMove(to view: SKView) {
         
-        
         run(voiceSound)
         
         //Adicionando background
@@ -46,12 +46,8 @@ public class GameScene: SKScene {
         background1.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         self.addChild(background1)
 
-
         
         view.showsFPS = true
-        
-        
-
         
     }
     
@@ -62,14 +58,12 @@ public class GameScene: SKScene {
             createStarPath(starCount: 7)
         }
         else{
-            createStarPath(starCount: 1)
+            
         }
     }
     
     // MARK: METHODS
-    
-    //CRIA,ATUALIZA, ETC
-    //ESTRELAS, ETC
+
     //update emitter
     func updateEmitter(emitter:SKEmitterNode , aurora:Aurora){
         
@@ -132,9 +126,14 @@ public class GameScene: SKScene {
         nextStar?.alpha = 0
         
         
+        
         if currentStarIndex < stars.count-1{
             currentStarIndex += 1
+            let previousStar = nextStar
             nextStar = stars[currentStarIndex]
+            let starDistance = distance(p1: previousStar!.position, p2: nextStar!.position)
+            let timeFor100 = Double(1)
+            nextStarMinTime = (Double(starDistance)/100 * timeFor100)
             nextStar?.alpha = 1
             aurora.upgrade()
             // MARK: CHANGE COLORS HERE
@@ -186,7 +185,7 @@ public class GameScene: SKScene {
         }
 
         emitters = []
-
+        followingStars = false
         
     }
     
@@ -276,18 +275,23 @@ public class GameScene: SKScene {
             followingStars = true
             
             //salva uma variavel o momento de agora para comparar com o toque da proxima estrela
-            lastStarTap = Date().timeIntervalSince1970 //salvando no ultimo tap o momento de agora
+            //lastStarTap = Date().timeIntervalSince1970 //salvando no ultimo tap o momento de agora
             emitters = [] //lista vazia
             spawnEmitter(pos: pos, aurora: aurora)
-            nextStar?.alpha = 0
-            currentStarIndex += 1
-            nextStar = stars[currentStarIndex]
-            nextStar?.alpha = 1
+            getNextStar()
+//            nextStar?.alpha = 0
+//            currentStarIndex += 1
+//            nextStar = stars[currentStarIndex]
+//            nextStar?.alpha = 1
         }
 
     }
     
-
+    func distance(p1: CGPoint, p2: CGPoint) -> CGFloat{
+        sqrt(pow((p2.x - p1.x), 2)+(pow((p2.y-p1.y), 2)))
+    }
+    
+    
     
     func touchMoved(toPoint pos : CGPoint) {
         //verifica se a pessoa está se aproximando da próxima estrela
@@ -298,12 +302,19 @@ public class GameScene: SKScene {
         
         else if followingStars == true && starpath == .yes{
             
-    
             //se sim: colocar emitter na posição e verfiica se chegou na próxima estrela (tempo maior do que minimo: se menor: desmonta a aurora atual)
             spawnEmitter(pos: pos, aurora: aurora)
             if nextStar?.contains(pos) ?? false {
-
-                getNextStar()
+                let currentTime = Date().timeIntervalSince1970
+                let dif = currentTime - (lastStarTap!)
+                if dif < nextStarMinTime!{
+                    destroyAurora(time: 1, progressive: false)
+                    createStarPath(starCount: Int.random(in: 3...7))
+                }
+                else{
+                    getNextStar()
+                }
+                
             }
         }
 
