@@ -21,16 +21,16 @@ PlaygroundPage.current.needsIndefiniteExecution = true
  
  # The Magic Hunt
   
-  * Note: For a complete experience, use this playground in split landscape.
+  * Note: For a complete experience, use this playground in split landscape and the volume...
   
  You have just read a poem based on a Finnish folktale about the origin of the northern lights. Now, I invite you to participate in a visual experience created from generative art. Have you ever ventured to look for the northern lights?
   
   ### Tips:
-  * Just like the child, ** follow the stars ** that appear in the sky.
+  * Just like the child, **follow the stars** that appear in the sky.
    
-  * ** Be patient! ** You should take it easy to truly experience this phenomena.
+  * **Be patient!** You should take it easy to truly experience this phenomena.
   
-  * ** Don't give up halfway! ** It takes resilience to achieve our goals.
+  * **Don't give up halfway!** It takes resilience to achieve our goals.
 
 
   # Do you want to have new experiences?
@@ -43,7 +43,7 @@ PlaygroundPage.current.needsIndefiniteExecution = true
 
   */
 
- //Do you feel like you're not in control of your own life?
+ //Do you feel like you're in control of your own life?
  var myMode: Answer = /*#-editable-code*/.yes/*#-end-editable-code*/
 
  // Do you enjoy being out of your comfort zone?
@@ -54,10 +54,10 @@ PlaygroundPage.current.needsIndefiniteExecution = true
 
  // # - hidden code
 
- scene.starpath = myMode
- scene.myEvolution = myEvolution
- scene.myChanges = myChanges
- scene.startGame ()
+scene.starpath = myMode == .yes ? .no : .yes
+scene.myEvolution = myEvolution
+scene.myChanges = myChanges
+scene.startGame ()
 
  // # - end-hidden-code
 

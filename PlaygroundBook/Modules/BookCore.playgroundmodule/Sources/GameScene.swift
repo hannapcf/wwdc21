@@ -16,9 +16,6 @@ public class GameScene: SKScene {
     public var starpath: Answer = .yes
     public var myEvolution: Answer = .yes
     public var myChanges: Answer = .yes
-    
-    let voiceSound = SKAction.playSoundFileNamed("theMagicHunt", waitForCompletion: false)
-    private var label:SKLabelNode!
     private var emitterNode = SKNode() //Criando um nó
     private let background = SKSpriteNode(imageNamed: "background") //Criando background
     private let background1 = SKSpriteNode(imageNamed: "background1")
@@ -36,7 +33,7 @@ public class GameScene: SKScene {
     // Essa parte do código é executada logo que a cena começa
     public override func didMove(to view: SKView) {
         
-        run(voiceSound)
+        
         
         //Adicionando background
         background.zPosition = 0
@@ -45,9 +42,10 @@ public class GameScene: SKScene {
         background1.zPosition = 80
         background1.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         self.addChild(background1)
-
         
         view.showsFPS = true
+        
+        GSAudio.sharedInstance.playSound(soundFileName: "theMagicHunt")
         
     }
     
@@ -55,11 +53,92 @@ public class GameScene: SKScene {
     public func startGame(){
         
         if starpath == .yes{
-            createStarPath(starCount: 7)
+            createStarPath(starCount: 5)
         }
         else{
-            
+            createStarPath(starCount: 10)
         }
+    }
+    
+    // MARK: SOUNDS
+    class GSAudio: NSObject, AVAudioPlayerDelegate {
+
+        static let sharedInstance = GSAudio()
+
+        private override init() {}
+
+        var players = [NSURL:AVAudioPlayer]()
+        var duplicatePlayers = [AVAudioPlayer]()
+
+        func playSound (soundFileName: String){
+
+            let soundFileNameURL = NSURL(fileURLWithPath: Bundle.main.path(forResource: soundFileName, ofType: "mp3")!)
+
+            if let player = players[soundFileNameURL] { //player for sound has been found
+
+                if player.isPlaying == false { //player is not in use, so use that one
+                    player.prepareToPlay()
+                    player.play()
+
+                } else { // player is in use, create a new, duplicate, player and use that instead
+
+                    let duplicatePlayer = try! AVAudioPlayer(contentsOf: soundFileNameURL as URL)
+                    //use 'try!' because we know the URL worked before.
+
+                    duplicatePlayer.delegate = self
+                    //assign delegate for duplicatePlayer so delegate can remove the duplicate once it's stopped playing
+
+                    duplicatePlayers.append(duplicatePlayer)
+                    //add duplicate to array so it doesn't get removed from memory before finishing
+
+                    duplicatePlayer.prepareToPlay()
+                    duplicatePlayer.play()
+
+                }
+            } else { //player has not been found, create a new player with the URL if possible
+                do{
+                    let player = try AVAudioPlayer(contentsOf: soundFileNameURL as URL)
+                    players[soundFileNameURL] = player
+                    player.prepareToPlay()
+                    player.volume = 0.1
+                    player.play()
+                } catch {
+                    print("Could not play sound file!")
+                }
+            }
+        }
+
+        func stopAll() {
+          players.forEach { $0.1.stop() }
+          duplicatePlayers.forEach { $0.stop() }
+          players.removeAll()
+          duplicatePlayers.removeAll()
+        }
+    }
+    
+    
+    //MARK: LABELS
+    
+    func setLabel(text: String, alpha: CGFloat, wait: TimeInterval){
+        var label:SKLabelNode!
+        label = SKLabelNode(text: text)
+        label.fontColor = .white
+        label.zPosition = 2000
+        label.fontSize = 20
+        label.alpha = alpha
+        label.position = CGPoint(x: 0, y: 200)
+        let labelFadeIn = SKAction.fadeIn(withDuration: 1)
+        let labelFadeOut = SKAction.fadeOut(withDuration: 2)
+        let labelWait = SKAction.wait(forDuration: wait)
+        label.run(.sequence([labelFadeIn, labelWait, labelFadeOut]))
+        label.name = "tip"
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        for tip in children where tip.name == "tip"{
+            tip.removeAllActions()
+            tip.removeFromParent()
+        }
+        self.addChild(label)
     }
     
     // MARK: METHODS
@@ -177,6 +256,7 @@ public class GameScene: SKScene {
         }
         if starpath == .yes{
             for star in stars{
+                
                 star.removeFromParent()
             }
             stars = []
@@ -238,10 +318,10 @@ public class GameScene: SKScene {
             stars.append(star)
             star.position = randomPosition
             star.zPosition = 100
-            star.setScale(0.2)
+            star.setScale(0.05)
             star.alpha = 0
-            let starFadeIn = SKAction.scale(to: 0.3, duration: 1)
-            let starFadeOut = SKAction.scale(to: 0.1, duration: 1)
+            let starFadeIn = SKAction.scale(to: 0.04, duration: 2)
+            let starFadeOut = SKAction.scale(to: 0.06, duration: 2)
             let starRepeatForever = SKAction.repeatForever(SKAction.sequence([starFadeIn, starFadeOut]))
             star.run(starRepeatForever)
             addChild(star)
@@ -309,7 +389,9 @@ public class GameScene: SKScene {
                 let dif = currentTime - (lastStarTap!)
                 if dif < nextStarMinTime!{
                     destroyAurora(time: 1, progressive: false)
-                    createStarPath(starCount: Int.random(in: 3...7))
+                    //MARK: ERRO AQUI
+                    setLabel(text: "be patient...\nchasing the northern lights takes time", alpha: 0, wait: 2)
+                    createStarPath(starCount: Int.random(in: 3...6))
                 }
                 else{
                     getNextStar()
@@ -331,10 +413,10 @@ public class GameScene: SKScene {
             //verifica se a pessoa passou em todas as estrelas
             followingStars = false
             if currentStarIndex < stars.count{
-                
+                setLabel(text: "chase the stars!\ndrag your finger over them", alpha: 0, wait: 2)
                 destroyAurora(time: 1, progressive: false)
             }
-            createStarPath(starCount: Int.random(in: 5...9))
+            createStarPath(starCount: Int.random(in: 3...6))
         }
 
         

@@ -20,6 +20,7 @@ public class Cutscene: SKScene{
     var beforeButton = SKSpriteNode(imageNamed: "before")
     var pageControl = SKSpriteNode(imageNamed: "pageControl1")
     var pageControl0 = SKSpriteNode(imageNamed: "pageControl0")
+    var nextPage = SKSpriteNode(imageNamed: "nextPage")
     
     func setUpButton(){
         
@@ -34,6 +35,12 @@ public class Cutscene: SKScene{
         beforeButton.zPosition = 1000
         beforeButton.alpha = 0
         addChild(beforeButton)
+        
+        nextPage.position = CGPoint(x: self.size.width*0.9, y: self.frame.midY)
+        nextPage.setScale(0.1)
+        nextPage.zPosition = 1000
+        nextPage.alpha = 0
+        addChild(nextPage)
     }
     
     public override func didMove(to view: SKView) {
@@ -76,11 +83,15 @@ public class Cutscene: SKScene{
         
         if nextButton.contains(pos) && nextButtonEnable == true{
             page += 1
-            if page > 2 {
-                
-                nextButtonEnable = false
+            if page == 3 {
+                nextButtonEnable = true
                 nextButton.alpha = 0
-                
+                nextPage.alpha = 1
+            }
+            if page == 4{
+                if nextPage.contains(pos){
+                    PlaygroundPage.current.navigateTo(page: .next)
+                }
             }
             beforeButtonEnable = true
             beforeButton.alpha = 1
@@ -97,8 +108,6 @@ public class Cutscene: SKScene{
             nextButton.alpha = 1
             changePoem()
         }
-        
-        //PlaygroundPage.current.navigateTo(page: .next)
 
     }
 
