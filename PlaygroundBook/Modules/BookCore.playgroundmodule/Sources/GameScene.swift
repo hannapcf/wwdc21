@@ -12,7 +12,8 @@ import AVFoundation
 public class GameScene: SKScene {
     
     // MARK: PROPERTIES
-    
+    var lastUpgrade: Double = 0
+    var timeBetwenUpdates: Double = 2
     public var starpath: Answer = .yes
     public var myEvolution: Answer = .yes
     public var myChanges: Answer = .yes
@@ -196,6 +197,16 @@ public class GameScene: SKScene {
         return emitter
     }
     
+    fileprivate func upgradeAurora() {
+        aurora.upgrade()
+        
+        if myChanges == .yes{
+            for emitter in emitters{
+                updateEmitter(emitter: emitter, aurora: aurora)
+            }
+        }
+    }
+    
     fileprivate func getNextStar() {
         
 
@@ -211,29 +222,18 @@ public class GameScene: SKScene {
             let previousStar = nextStar
             nextStar = stars[currentStarIndex]
             let starDistance = distance(p1: previousStar!.position, p2: nextStar!.position)
-            let timeFor100 = Double(1)
+            let timeFor100 = Double(0.9) // TODO: calibrar
             nextStarMinTime = (Double(starDistance)/100 * timeFor100)
             nextStar?.alpha = 1
-            aurora.upgrade()
-            // MARK: CHANGE COLORS HERE
-            if myChanges == .yes{
-                for emitter in emitters{
-                    updateEmitter(emitter: emitter, aurora: aurora)
-                }
-            }
+            upgradeAurora()
 
         }
         else if currentStarIndex == stars.count-1{
             followingStars = false
             currentStarIndex += 1
-            aurora.upgrade()
-            // MARK: CHANGE COLORS HERE
-            if myChanges == .yes{
-                for emitter in emitters{
-                    updateEmitter(emitter: emitter, aurora: aurora)
-                }
-            }
+            upgradeAurora()
             destroyAurora(time: 6, progressive: true)
+            setLabel(text: "Congratulations!\nWith patience and resilience you have achieved your goal! \nNow it's time to get a new one!", alpha: 0, wait: 4)
             
         }
     }
@@ -319,7 +319,7 @@ public class GameScene: SKScene {
             star.position = randomPosition
             star.zPosition = 100
             star.setScale(0.05)
-            star.alpha = 0
+            star.alpha = starpath == .yes ? 0 : 1
             let starFadeIn = SKAction.scale(to: 0.04, duration: 2)
             let starFadeOut = SKAction.scale(to: 0.06, duration: 2)
             let starRepeatForever = SKAction.repeatForever(SKAction.sequence([starFadeIn, starFadeOut]))
@@ -374,8 +374,17 @@ public class GameScene: SKScene {
     
     
     func touchMoved(toPoint pos : CGPoint) {
+        
         //verifica se a pessoa está se aproximando da próxima estrela
         if starpath == .no{
+            if stars.filter({$0.contains(pos)}).count > 0{
+                let currentTime = Date().timeIntervalSince1970
+                if currentTime - lastUpgrade > timeBetwenUpdates{
+                    upgradeAurora()
+                    lastUpgrade = currentTime
+                }
+                
+            }
             spawnEmitter(pos: pos, aurora: aurora)
             
         }
@@ -389,7 +398,6 @@ public class GameScene: SKScene {
                 let dif = currentTime - (lastStarTap!)
                 if dif < nextStarMinTime!{
                     destroyAurora(time: 1, progressive: false)
-                    //MARK: ERRO AQUI
                     setLabel(text: "be patient...\nchasing the northern lights takes time", alpha: 0, wait: 2)
                     createStarPath(starCount: Int.random(in: 3...6))
                 }
@@ -406,7 +414,7 @@ public class GameScene: SKScene {
     
     func touchUp(atPoint pos : CGPoint) {
         if starpath == .no{
-            destroyAurora(time: 6, progressive: true)
+            destroyAurora(time: 12, progressive: true)
         }
         else{
             

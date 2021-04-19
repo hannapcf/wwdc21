@@ -148,7 +148,7 @@ public class Aurora{
         
         //color sequence
         if randomHues{
-            particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 20/100 * proportion, brightness: 100/100, alpha: 0.3), time: 0.2)
+            particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 50/100 * proportion, brightness: 100/100, alpha: 0.3), time: 0.2)
 
             particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 80/100 * proportion, brightness: 100/100, alpha: 0.5), time: CGFloat.random(in: 0.5...1))
 
@@ -157,7 +157,7 @@ public class Aurora{
             particleColorSequence.addKeyframeValue(UIColor(hue: CGFloat.random(in: 0...1), saturation: 70/100 * proportion, brightness: 100/100, alpha: 0.15), time: CGFloat.random(in: 2...4))
         }
         else{
-            particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[0], saturation: 20/100 * proportion, brightness: 100/100, alpha: 0.3), time: 0)
+            particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[0], saturation: 50/100 * proportion, brightness: 100/100, alpha: 0.3), time: 0)
 
             particleColorSequence.addKeyframeValue(UIColor(hue: originalColorsHues[1], saturation: 80/100 * proportion, brightness: 100/100, alpha: 0.5), time: CGFloat.random(in: 0.5...1))
 

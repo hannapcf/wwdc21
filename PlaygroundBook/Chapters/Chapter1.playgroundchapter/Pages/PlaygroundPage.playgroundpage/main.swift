@@ -26,14 +26,14 @@ PlaygroundPage.current.needsIndefiniteExecution = true
  You have just read a poem based on a Finnish folktale about the origin of the northern lights. Now, I invite you to participate in a visual experience created from generative art. Have you ever ventured to look for the northern lights?
   
   ### Tips:
-  * Just like the child, **follow the stars** that appear in the sky.
+  * Just like the child from the poem, **follow the stars** that appear in the sky.
    
   * **Be patient!** You should take it easy to truly experience this phenomena.
   
   * **Don't give up halfway!** It takes resilience to achieve our goals.
 
 
-  # Do you want to have new experiences?
+  # Do you want to create your personal aurora?
   If you wish, you can create your own experience by answering the quiz:
   
   * callout (answer):
