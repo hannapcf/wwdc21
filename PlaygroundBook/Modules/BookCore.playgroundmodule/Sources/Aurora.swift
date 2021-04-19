@@ -128,8 +128,8 @@ public class Aurora{
         let proportion = 0.3 + 0.6 * (CGFloat(auroraCurrentLevel)/CGFloat(auroraMaxUpgrade))
         
         //particle
-        particleBirthRateMin = CGFloat.random(in: 1...3) * proportion
-        particleBirthRateMax = CGFloat.random(in: 5...10) * proportion
+        particleBirthRateMin = CGFloat.random(in: 1...2) * proportion
+        particleBirthRateMax = CGFloat.random(in: 4...6) * proportion
         particleLifeTime = CGFloat.random(in: 1.5...4) * proportion
         
         //position range

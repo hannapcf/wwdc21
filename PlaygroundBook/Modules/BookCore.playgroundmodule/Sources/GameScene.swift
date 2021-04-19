@@ -57,7 +57,7 @@ public class GameScene: SKScene {
             createStarPath(starCount: 5)
         }
         else{
-            createStarPath(starCount: 10)
+            createStarPath(starCount: 6)
         }
     }
     
@@ -414,7 +414,7 @@ public class GameScene: SKScene {
     
     func touchUp(atPoint pos : CGPoint) {
         if starpath == .no{
-            destroyAurora(time: 12, progressive: true)
+            destroyAurora(time: 10, progressive: true)
         }
         else{
             
